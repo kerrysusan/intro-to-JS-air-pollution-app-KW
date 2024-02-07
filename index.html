@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Air Pollution App</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <style>
+      body {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+      }
+      .container {
+        background: radial-gradient(
+          401px at 50.6% -0.3%,
+          rgba(255, 255, 255, 0.31) 1.2%,
+          rgb(36, 212, 219) 100.2%
+        );
+        padding: 20px;
+      }
+
+      h1 {
+        text-align: center;
+      }
+      h2 {
+        text-align: center;
+        font-size: 20px;
+      }
+      h3 {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Daily air pollution update</h1>
+      <br />
+      <h2>
+        Hi 🤩
+        <span class="userName"></span>Welcome to your air pollution update for
+        today 💚
+      </h2>
+      <h3>
+        Today's London Air Quality Index value is <span id="aqi-number"> </span>
+      </h3>
+      <br />
+      <button type="button" class="btn btn-light" id="aqiButton">
+        Click for today's air quality index
+      </button>
+      <br />
+      <br />
+      <p>
+        AQI = Air Quality Index
+        <br />
+        This is a 1-5 scale index which takes into account the concentration of
+        several primary air pollutants to provide a simple assessment of air
+        quality which can be compared from day to day.
+      </p>
+      <ul id="aqiScale">
+        <li>1 - Good 🤩</li>
+        <li>2 - Fair 😊</li>
+        <li>3 - Moderate 😌</li>
+        <li>4 - Poor 🫤</li>
+        <li>5 - Very Poor 😞</li>
+      </ul>
+
+      <br />
+
+      <button type="button" class="btn btn-success" id="aqiInfoButton">
+        Click for a tip to limit your air pollution exposure!
+      </button>
+
+      <br />
+      <br />
+
+      <div><p id="aqiInfo"></p></div>
+
+      <h6>Helpful information:</h6>
+      <a
+        href="https://education.nationalgeographic.org/resource/air-pollution/"
+        target="_blank"
+        >Impacts of air pollution</a
+      >
+
+      <script>
+        // initial prompt and alert to greet the user as they arrive on the page
+        const name = prompt("What is your name");
+        const greeting = "Hello 😍";
+        const message = `${greeting} ${name}`;
+        alert(message);
+        // function pulling the response from an API call to retrieve real world air quality data and present this information as dynamically in HTML to the user, as well as alerting the user with different information depending on the response received (if / else)
+        function displayAirQuality(response) {
+          console.log(response.data.list[0].main.aqi);
+          alert(
+            `The air quality index value today is ${response.data.list[0].main.aqi}`
+          );
+          console.log(response.data.list);
+          document.querySelector("#aqi-number").innerHTML =
+            response.data.list[0].main.aqi;
+          let aqiValue = response.data.list[0].main.aqi;
+          if (aqiValue <= 2) {
+            alert(`The air quality is good today - enjoy the great outdoors!`);
+          } else if (aqiValue === 3) {
+            alert(`The air quality is moderate today`);
+          } else {
+            alert(
+              `The air quality is poor today - take care in congested areas`
+            );
+          }
+        }
+        // function to call real world data via API call (using axios get method)
+        function runApiCall() {
+          let apiKey = "c7656c96607e5bf046bfb0c99196fe2d";
+          let apiUrl = `http://api.openweathermap.org/data/2.5/air_pollution?lat=51.509865&lon=-0.118092&appid=${apiKey}`;
+          axios.get(apiUrl).then(displayAirQuality);
+        }
+        // declaring a button variable and adding event listener to run the API call function when it is clicked
+        let buttonOne = document.getElementById("aqiButton");
+        buttonOne.addEventListener("click", runApiCall);
+        // function to display randomly one of an array of potential tips to manage air pollution
+        function displayInfo() {
+          function displayRandomInfo(environmentalTips) {
+            let randomIndex = Math.floor(
+              Math.random() * environmentalTips.length
+            );
+            let randomEnvironmentalTip = environmentalTips[randomIndex];
+            return randomEnvironmentalTip;
+          }
+          let environmentalTips = [
+            "Keep indoor plants for air purifying",
+            "Use air purifiers with carbon filter, an antibacterial filter and a HEPA filter",
+            "Sign up to air pollution alerts - there are lots of helpful apps for this",
+            "Where possible, avoid the busier routes and take a quiter walk or cycle route to work",
+          ];
+          let result = displayRandomInfo(environmentalTips);
+          console.log(result);
+          document.getElementById("aqiInfo").textContent = result;
+        }
+        // declaring second button variable and adding an event listener to run the function which displays (randomly) a piece of information when it is clicked
+        let buttonTwo = document.getElementById("aqiInfoButton");
+        buttonTwo.addEventListener("click", displayInfo);
+        // using JS to overwrite text content in HTML
+        let aqiScaleList = document.getElementById("aqiScale");
+        aqiScaleList.textContent =
+          "1 - Good 🤩, 2 - Fair 😊, 3 - Moderate 😌, 4 - Poor 🫤, 5 - Very Poor 😞";
+      </script>
+    </div>
+  </body>
+</html>
