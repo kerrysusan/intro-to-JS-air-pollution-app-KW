@@ -116,7 +116,7 @@
         // function to call real world data via API call (using axios get method)
         function runApiCall() {
           let apiKey = "c7656c96607e5bf046bfb0c99196fe2d";
-          let apiUrl = `http://api.openweathermap.org/data/2.5/air_pollution?lat=51.509865&lon=-0.118092&appid=${apiKey}`;
+          let apiUrl = `https://api.openweathermap.org/data/2.5/air_pollution?lat=51.509865&lon=-0.118092&appid=${apiKey}`;
           axios.get(apiUrl).then(displayAirQuality);
         }
         // declaring a button variable and adding event listener to run the API call function when it is clicked
